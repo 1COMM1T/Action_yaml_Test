@@ -1,0 +1,89 @@
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Camp_Reserve
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    database: mysql
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://13.209.25.84:3306/camp_us # 24.8.14탄력적 IP 변경
+    hikari:
+      username: comm1t #생성
+      password: comm1t
+
+  # 24.08.08 - cognito 추가
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 74c81051576be2126396ca67ae865bbf
+            client-secret: jL5tYa5A9wGyEHTFLuqzFmpRoTYEdUvg
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            client-name: Kakao
+            scope:
+              - profile_nickname
+              - account_email
+          cognito:
+            clientId: 69p021jvov5bd4arrdcrgrgvrs
+            clientSecret: 16dj9adca3u9qc5ea4436b7otdi2e4nfrp2fq5oigp1iitrsa6c8
+            scope: openid, email
+            redirect-uri: http://localhost:8080/login/oauth2/code/cognito
+            authorization-grant-type: authorization_code
+            clientName: commit-client
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+          cognito:
+            issuer-uri: https://cognito-idp.ap-northeast-2.amazonaws.com/ap-northeast-2_2qtl6ioip
+            user-name-attribute: cognito:email
+            token-uri: https://commit-test.auth.ap-northeast-2.amazoncognito.com/oauth2/token
+            jwk-set-uri: https://cognito-idp.ap-northeast-2.amazonaws.com/ap-northeast-2_2qtl6ioip/.well-known/jwks.json
+
+  # 24.7.28 - Redis 추가
+  data:
+    redis:
+      host: 13.209.25.84 # 24.8.14 탄력적 IP 주소 변경
+      port: 6379
+      password: comm1t # 24.8.6 ec2에 설치된 redis 연결을 위한 패스워드
+      timeout: 7200000 # 24.7.31 - timout 시간 변경(2시간)
+
+token:
+  expiration_time: 43200000
+  secret: hYoDvhit5qUiy4eYb4pmc17BJV3zTmd0jhwoIIXiOFNWjISYEqvcpalBc2m9zassJrPbRc4rtOD3cbkaNGtRgA==
+
+# 24. 7. 30 - api 호출용
+gocamping:
+  api:
+    base-url: http://apis.data.go.kr/B551011/GoCamping
+    encoding-key: Au%2FsJXmqYwNOJf1Wq3qbzEo6OzW4p5KALPI2%2FnvXgdZWHiHm5jTl2dMdr%2FR75gxHwTuOeH7pVCOUkUfg4c%2FkZQ%3D%3D
+    decoding-key: Au/sJXmqYwNOJf1Wq3qbzEo6OzW4p5KALPI2/nvXgdZWHiHm5jTl2dMdr/R75gxHwTuOeH7pVCOUkUfg4c/kZQ==
+
+
+# 24. 7. 30 - Swagger UI 설정 추가
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html        # Swagger UI 경로 => localhost:"포트번호"/demo-ui.html
+    operationsSorter: method      # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
+    tagsSorter: alpha             # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
+    tryItOutEnabled: true
+
+# 24.8.13 - elastic apm 설정
+elastic:
+  apm:
+    service_name: campus
+    server_url: http://3.39.111.18:8200
+    application_packages: com.commit.campus
