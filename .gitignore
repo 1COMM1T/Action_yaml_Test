@@ -110,7 +110,6 @@ local.properties
 build/
 
 # Allow Gradle Wrapper jar file
-gradle/
 !gradle/wrapper/gradle-wrapper.jar
 
 # Gradle and Maven with auto-import
