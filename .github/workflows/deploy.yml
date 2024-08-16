@@ -47,8 +47,25 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Set yml file
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: '**/application.yml'
+        env:
+          spring.datasource.url: ${{ secrets.DB_URL }}
+          spring.datasource.hikari.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.hikari.password: ${{ secrets.DB_PASSWORD }}
+          spring.data.redis.host: ${{ secrets.REDIS_HOST }}
+          spring.data.redis.password: ${{ secrets.REDIS_PASSWORD }}
+          spring.security.oauth2.client.registration.cognito.clientId: ${{ secrets.COGNITO_CLIENT_ID }}
+          spring.security.oauth2.client.registration.cognito.clientSecret: ${{ secrets.COGNITO_CLIENT_SECRET }}
+          spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.KAKAO_CLIENT_ID }}
+          spring.security.oauth2.client.registration.kakao.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          token.secret: ${{ secrets.TOKEN_SECRET }}
+          elastic.apm.server_url: ${{ secrets.APM_URL }}
+
       - name: Build and test with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build test
 
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@master
