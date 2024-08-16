@@ -8,19 +8,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    env:
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      REDIS_HOST: ${{ secrets.REDIS_HOST }}
-      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-      COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
-      COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
-      KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
-      KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
-      TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
-      APM_URL: ${{ secrets.APM_URL }}
-
     steps:
       - uses: actions/checkout@v3
 
@@ -65,6 +52,18 @@ jobs:
           elastic.apm.server_url: ${{ secrets.APM_URL }}
 
       - name: Build and test with Gradle
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+          COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
+          KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+          APM_URL: ${{ secrets.APM_URL }}
         run: ./gradlew build test
 
       - name: Copy JAR to EC2
