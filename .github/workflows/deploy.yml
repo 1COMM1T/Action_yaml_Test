@@ -46,7 +46,7 @@ jobs:
           KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
           APM_URL: ${{ secrets.APM_URL }}
-        run: ./gradlew build -x test
+        run: ./gradlew build test
 
       - name: Copy JAR to EC2
         uses: appleboy/scp-action@master
