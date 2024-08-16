@@ -13,7 +13,7 @@ public class TestController {
 
     @PostMapping
     public ResponseEntity<Void> test() {
-        log.info("새로운 레포지토리 확인");
+        log.info("진짜 끝남 새로운 레포지토리 확인");
         return ResponseEntity.ok().build();
     }
 }
