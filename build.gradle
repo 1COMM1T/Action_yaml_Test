@@ -90,7 +90,7 @@ dependencies {
 }
 
 tasks.named('bootJar') {
-    mainClass.set('com.commit.campus.CampReserveApplication')
+    mainClass.set('com.commit.campus.ActionYamlTestApplication')
 }
 tasks.named('test') {
     useJUnitPlatform()
