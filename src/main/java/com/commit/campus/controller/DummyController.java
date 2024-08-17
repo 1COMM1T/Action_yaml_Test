@@ -26,14 +26,13 @@ public class DummyController {
 
     // 리뷰 더미 데이터 생성
     @PostMapping("/generate-dummy")
-    public ResponseEntity<Void> generateDummyReviews(@RequestParam int count, @RequestParam long user) {
-        log.info("count, user : ", count, user);
+    public ResponseEntity<Void> generateDummyReviews(@RequestParam long user) {
         long userId = user;
-        Random random = new Random();
-        for (int i = 0; i < count; i++) {
+        int campMaxCount = 3988;
+
+        for (int i = 1; i < campMaxCount; i++) {
             CreateReviewRequest createReviewRequest = new CreateReviewRequest();
-            // 3부터 3930까지의 camp_id를 랜덤하게 생성
-            long campId = 3 + random.nextInt(3928); // 3 + (0부터 3927까지의 난수)
+            long campId = i;
             createReviewRequest.setCampId(campId);
             createReviewRequest.setReviewContent("This is a dummy review content " + i);
             createReviewRequest.setRating((i % 5) + 1); // 1부터 5까지의 rating을 순환하며 생성
