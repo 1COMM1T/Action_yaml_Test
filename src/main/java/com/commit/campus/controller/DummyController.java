@@ -26,17 +26,19 @@ public class DummyController {
 
     // 리뷰 더미 데이터 생성
     @PostMapping("/generate-dummy")
-    public ResponseEntity<Void> generateDummyReviews(@RequestParam long user) {
+    public ResponseEntity<Void> generateDummyReviews(
+            @RequestParam int start,
+            @RequestParam int campMaxCount,
+            @RequestParam long user) {
         long userId = user;
-        int campMaxCount = 3988;
 
-        for (int i = 1; i < campMaxCount; i++) {
+        for (start = 1; start < campMaxCount; start++) {
             CreateReviewRequest createReviewRequest = new CreateReviewRequest();
-            long campId = i;
+            long campId = start;
             createReviewRequest.setCampId(campId);
-            createReviewRequest.setReviewContent("This is a dummy review content " + i);
-            createReviewRequest.setRating((i % 5) + 1); // 1부터 5까지의 rating을 순환하며 생성
-            createReviewRequest.setReviewImageUrl("http://example.com/image" + i + ".jpg");
+            createReviewRequest.setReviewContent("This is a dummy review content " + start);
+            createReviewRequest.setRating((start % 5) + 1); // 1부터 5까지의 rating을 순환하며 생성
+            createReviewRequest.setReviewImageUrl("http://example.com/image" + start + ".jpg");
 
             ReviewDTO reviewDTO = modelMapper.map(createReviewRequest, ReviewDTO.class);
             reviewDTO.setUserId(userId);
