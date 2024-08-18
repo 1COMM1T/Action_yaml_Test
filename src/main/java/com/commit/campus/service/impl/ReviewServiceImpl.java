@@ -42,13 +42,21 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public void createReview(ReviewDTO reviewDTO) throws ReviewAlreadyExistsException {
+        log.info("리뷰 생성 시작 - 유저ID: {}, 캠핑장ID: {}", reviewDTO.getUserId(), reviewDTO.getCampId());
 
         checkExistingReview(reviewDTO.getUserId(), reviewDTO.getCampId());
 
         Review savedReview = saveReview(reviewDTO);
+        log.info("리뷰 저장 완료 - 리뷰ID: {}", savedReview.getReviewId());
+
         updateMyReview(savedReview.getUserId(), savedReview.getReviewId(), true);
+        log.info("내 리뷰 업데이트 완료 - 유저ID: {}, 리뷰ID: {}", savedReview.getUserId(), savedReview.getReviewId());
+
         updateRating(savedReview.getCampId(), savedReview.getRating(), true);
+        log.info("캠핑장 평점 업데이트 완료 - 캠핑장ID: {}, 평점: {}", savedReview.getCampId(), savedReview.getRating());
+
         incrementReviewCnt(savedReview.getCampId());
+        log.info("캠핑장 리뷰 카운트 증가 완료 - 캠핑장ID: {}", savedReview.getCampId());
     }
 
     @Override
@@ -90,13 +98,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void checkExistingReview(long userId, long campId) {
+        log.info("기존 리뷰 확인 - 유저ID: {}, 캠핑장ID: {}", userId, campId);
 
         if (reviewRepository.existsByUserIdAndCampId(userId, campId)) {
+            log.warn("리뷰가 이미 존재함 - 유저ID: {}, 캠핑장ID: {}", userId, campId);
             throw new ReviewAlreadyExistsException("이미 이 캠핑장에 대한 리뷰를 작성하셨습니다.");
         }
     }
 
     private Review saveReview(ReviewDTO reviewDTO) {
+        log.info("리뷰 저장 중 - 유저ID: {}, 캠핑장ID: {}", reviewDTO.getUserId(), reviewDTO.getCampId());
 
         Review review = Review.builder()
                 .campId(reviewDTO.getCampId())
@@ -111,6 +122,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void updateMyReview(long userId, long reviewId, boolean isIncrement) {
+        log.info("내 리뷰 업데이트 중 - 유저ID: {}, 리뷰ID: {}, 증가 여부: {}", userId, reviewId, isIncrement);
 
         myReviewRepository.findById(userId)
                 .ifPresentOrElse(
@@ -120,6 +132,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void updateExistingMyReview(MyReview myReview, long reviewId, boolean isIncrement) {
+        log.info("기존 내 리뷰 업데이트 - 리뷰ID: {}, 증가 여부: {}", reviewId, isIncrement);
 
         if (isIncrement) {
             myReview.incrementReviewCnt(reviewId);
@@ -130,6 +143,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void createNewMyReview(long userId, long reviewId) {
+        log.info("새로운 내 리뷰 생성 - 유저ID: {}, 리뷰ID: {}", userId, reviewId);
 
         MyReview newMyReview = new MyReview(userId);
         newMyReview.incrementReviewCnt(reviewId);
@@ -137,6 +151,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void updateRating(long campId, int rating, boolean isIncrement) {
+        log.info("캠핑장 평점 업데이트 중 - 캠핑장ID: {}, 평점: {}, 증가 여부: {}", campId, rating, isIncrement);
 
         if (isIncrement) {
             ratingSummaryRepository.incrementRating(campId, rating);
@@ -152,18 +167,20 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private void incrementReviewCnt(long campId) {
+        log.info("캠핑장 리뷰 카운트 증가 중 - 캠핑장ID: {}", campId);
 
-       campingSummaryRepository.findById(campId)
-               .ifPresentOrElse(
-                       campingSummary -> {
-                           campingSummary.incrementReviewCnt();
-                           campingSummaryRepository.save(campingSummary);
-                       },
-                       () -> createNewCampingSummary(campId)
-               );
+        campingSummaryRepository.findById(campId)
+                .ifPresentOrElse(
+                        campingSummary -> {
+                            campingSummary.incrementReviewCnt();
+                            campingSummaryRepository.save(campingSummary);
+                        },
+                        () -> createNewCampingSummary(campId)
+                );
     }
 
     private void createNewCampingSummary(long campId) {
+        log.info("새로운 캠핑장 요약 생성 - 캠핑장ID: {}", campId);
 
         CampingSummary newSummary = CampingSummary.builder()
                 .campId(campId)
