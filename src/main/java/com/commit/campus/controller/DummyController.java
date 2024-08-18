@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Random;
-
 @RestController
 @Slf4j
 public class DummyController {
@@ -30,22 +28,31 @@ public class DummyController {
             @RequestParam int start,
             @RequestParam int campMaxCount,
             @RequestParam long user) {
+        // 입력값 유효성 검증
+        if (start < 1 || campMaxCount < start) {
+            log.error("Invalid start or campMaxCount values. start: {}, campMaxCount: {}", start, campMaxCount);
+            return ResponseEntity.badRequest().build();
+        }
+
         long userId = user;
+        for (int i = start; i <= campMaxCount; i++) {
+            try {
+                CreateReviewRequest createReviewRequest = new CreateReviewRequest();
+                long campId = i;
+                createReviewRequest.setCampId(campId);
+                createReviewRequest.setReviewContent("This is a dummy review content " + i);
+                createReviewRequest.setRating((i % 5) + 1); // 1부터 5까지의 rating을 순환하며 생성
+                createReviewRequest.setReviewImageUrl("http://example.com/image" + i + ".jpg");
 
-        for (start = 1; start < campMaxCount; start++) {
-            CreateReviewRequest createReviewRequest = new CreateReviewRequest();
-            long campId = start;
-            createReviewRequest.setCampId(campId);
-            createReviewRequest.setReviewContent("This is a dummy review content " + start);
-            createReviewRequest.setRating((start % 5) + 1); // 1부터 5까지의 rating을 순환하며 생성
-            createReviewRequest.setReviewImageUrl("http://example.com/image" + start + ".jpg");
+                ReviewDTO reviewDTO = modelMapper.map(createReviewRequest, ReviewDTO.class);
+                reviewDTO.setUserId(userId);
+                reviewService.createReview(reviewDTO);
 
-            ReviewDTO reviewDTO = modelMapper.map(createReviewRequest, ReviewDTO.class);
-            reviewDTO.setUserId(userId);
-            reviewService.createReview(reviewDTO);
+            } catch (Exception e) {
+                log.error("Error occurred while creating review for campId: " + i, e);
+            }
         }
 
         return ResponseEntity.noContent().build();
     }
-
 }
