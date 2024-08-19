@@ -14,6 +14,6 @@ public class TestController {
     @PostMapping
     public ResponseEntity<String> test() {
         log.info("진짜 끝남 새로운 레포지토리 확인");
-        return ResponseEntity.ok().body("확인");
+        return ResponseEntity.ok().body("마지막 테스트 확인");
     }
 }
