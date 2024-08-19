@@ -47,7 +47,7 @@ spring:
           cognito:
             issuer-uri: ${COGNITO_ISSUER_URI}
             user-name-attribute: cognito:email
-            token-uri: https://commit-test.auth.ap-northeast-2.amazoncognito.com/oauth2/token
+            token-uri: ${COGNITO_TOKEN_URI}
             jwk-set-uri: https://cognito-idp.ap-northeast-2.amazonaws.com/ap-northeast-2_2qtl6ioip/.well-known/jwks.json
 
   # 24.7.28 - Redis 추가

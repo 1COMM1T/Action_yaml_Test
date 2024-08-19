@@ -53,6 +53,7 @@ jobs:
           gocamping.api.encoding-key: ${{ secrets.GOCAMPING_ENCODING_KEY }}
           gocamping.api.decoding-key: ${{ secrets.GOCAMPING_DECODING_KEY }}
           cognito.issuer-uri: ${{ secrets.COGNITO_ISSUER_URI }}
+          cognito.token-uri: ${{ secrets.COGNITO_TOKEN_URI }}
 
       - name: Build and test with Gradle
         env:
@@ -70,6 +71,7 @@ jobs:
           GOCAMPING_DECODING_KEY: ${{ secrets.GOCAMPING_DECODING_KEY }}
           GOCAMPING_ENCODING_KEY: ${{ secrets.GOCAMPING_ENCODING_KEY }}
           COGNITO_ISSUER_URI: ${{ secrets.COGNITO_ISSUER_URI }}
+          COGNITO_TOKEN_URI: ${{ secrets.COGNITO_TOKEN_URI }}
         run: ./gradlew build test
 
       - name: Copy JAR to EC2
