@@ -45,7 +45,7 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
           cognito:
-            issuer-uri: ${COGNITO_ISSUER_URI}
+            issuer-uri: https://cognito-idp.ap-northeast-2.amazonaws.com/ap-northeast-2_2qtl6ioip
             user-name-attribute: cognito:email
             token-uri: https://commit-test.auth.ap-northeast-2.amazoncognito.com/oauth2/token
             jwk-set-uri: ${COGNITO_JWK_SET_URI}
