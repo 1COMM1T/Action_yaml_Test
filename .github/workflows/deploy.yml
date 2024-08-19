@@ -52,7 +52,9 @@ jobs:
           elastic.apm.server_url: ${{ secrets.APM_URL }}
           gocamping.api.encoding-key: ${{ secrets.GOCAMPING_ENCODING_KEY }}
           gocamping.api.decoding-key: ${{ secrets.GOCAMPING_DECODING_KEY }}
-          cognito.jwk-set-uri: ${{ secrets.COGNITO_JWK_SET_URI }}
+          spring.security.oauth2.client.provider.cognito.issuer-uri: ${{ secrets.COGNITO_ISSUER_URI }}
+          spring.security.oauth2.client.provider.cognito.token-uri: ${{ secrets.COGNITO_TOKEN_URI }}
+          spring.security.oauth2.client.provider.cognito.jwk-set-uri: ${{ secrets.COGNITO_JWK_SET_URI }}
 
       - name: Build and test with Gradle
         env:
@@ -69,6 +71,8 @@ jobs:
           APM_URL: ${{ secrets.APM_URL }}
           GOCAMPING_DECODING_KEY: ${{ secrets.GOCAMPING_DECODING_KEY }}
           GOCAMPING_ENCODING_KEY: ${{ secrets.GOCAMPING_ENCODING_KEY }}
+          COGNITO_ISSUER_URI: ${{ secrets.COGNITO_ISSUER_URI }}
+          COGNITO_TOKEN_URI: ${{ secrets.COGNITO_TOKEN_URI }}
           COGNITO_JWK_SET_URI: ${{ secrets.COGNITO_JWK_SET_URI }}
         run: ./gradlew build test
 
