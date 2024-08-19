@@ -64,6 +64,8 @@ jobs:
           KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
           TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
           APM_URL: ${{ secrets.APM_URL }}
+          GOCAMPING_DECODING_KEY: ${{ secrets.GOCAMPING_DECODING_KEY }}
+          GOCAMPING_ENCODING_KEY: ${{ secrets.GOCAMPING_ENCODING_KEY }}
         run: ./gradlew build test
 
       - name: Copy JAR to EC2
