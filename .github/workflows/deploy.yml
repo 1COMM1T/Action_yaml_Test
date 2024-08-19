@@ -53,7 +53,6 @@ jobs:
           gocamping.api.encoding-key: ${{ secrets.GOCAMPING_ENCODING_KEY }}
           gocamping.api.decoding-key: ${{ secrets.GOCAMPING_DECODING_KEY }}
           cognito.issuer-uri: ${{ secrets.COGNITO_ISSUER_URI }}
-          cognito.token-uri: ${{ secrets.COGNITO_TOKEN_URI }}
           cognito.jwk-set-uri: ${{ secrets.COGNITO_JWK_SET_URI }}
 
       - name: Build and test with Gradle
@@ -72,7 +71,6 @@ jobs:
           GOCAMPING_DECODING_KEY: ${{ secrets.GOCAMPING_DECODING_KEY }}
           GOCAMPING_ENCODING_KEY: ${{ secrets.GOCAMPING_ENCODING_KEY }}
           COGNITO_ISSUER_URI: ${{ secrets.COGNITO_ISSUER_URI }}
-          COGNITO_TOKEN_URI: ${{ secrets.COGNITO_TOKEN_URI }}
           COGNITO_JWK_SET_URI: ${{ secrets.COGNITO_JWK_SET_URI }}
         run: ./gradlew build test
 
